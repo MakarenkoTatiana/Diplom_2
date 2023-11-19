@@ -7,13 +7,17 @@ import org.junit.Test;
 
 import static io.restassured.RestAssured.given;
 
-public class CreateUserTest {
-    @Before
+public class CreateUserTest extends TestBase{
+    String accessToken;
+    Response response;
+
+    @Override
     public void setUp() {
         RestAssured.baseURI = Constants.baseUri;
     }
-    String accessToken;
-    Response response;
+    @Override
+    public void tearDown() {
+    }
 
     @Test
     public void registerUniqUser() {
@@ -64,9 +68,9 @@ public class CreateUserTest {
     @Step("Send DELETE request to /api/auth/user")
     public void sendDeleteRequestAuthUser(String token) {
         given()
-             .header("Content-type", "application/json")
-             .header("Authorization", token)
-             .when()
-             .delete("/api/auth/user");
+                .header("Content-type", "application/json")
+                .header("Authorization", token)
+                .when()
+                .delete("/api/auth/user");
     }
 }
