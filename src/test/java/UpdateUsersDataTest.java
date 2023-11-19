@@ -7,19 +7,13 @@ import static org.junit.Assert.*;
 
 public class UpdateUsersDataTest extends  TestBase{
     String refreshToken;
-    Response updtResponse;
     String responseMessage;
 
     @Test
     public void updateDataWithAuthTest() {
         sendPostRequestAuthLogin(Constants.loginJson);
         refreshToken = loginResponse.then().extract().path("refreshToken");
-        updtResponse = given()
-                .contentType(JSON)
-                .header("Authorization", accessToken)
-                .and()
-                .body(Constants.UPDT_JSON)
-                .patch("/api/auth/user");
+        sendPatchRequestAuthUser(accessToken);
         String actualUserName = updtResponse
                 .then()
                 .assertThat()
@@ -41,12 +35,7 @@ public class UpdateUsersDataTest extends  TestBase{
     public void updateDataWithoutAuthTest() {
         String emptyAccessToken = "";
         String expectedMessage = "You should be authorised";
-        updtResponse = given()
-                .contentType(JSON)
-                .header("Authorization", emptyAccessToken)
-                .and()
-                .body(Constants.UPDT_JSON)
-                .patch("/api/auth/user");
+        sendPatchRequestAuthUser(emptyAccessToken);
         responseMessage = updtResponse
                 .then()
                 .assertThat()

@@ -5,11 +5,13 @@ import org.junit.After;
 import org.junit.Before;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.http.ContentType.JSON;
 
 public class TestBase {
     public String accessToken;
     public Response response;
     public Response loginResponse;
+    public Response updtResponse;
 
     @Before
     public void setUp() {
@@ -58,5 +60,15 @@ public class TestBase {
                 .when()
                 .post("/api/auth/login");
         return loginResponse;
+    }
+
+    @Step("Send PATCH request to /api/auth/user")
+    public void sendPatchRequestAuthUser(String token) {
+        updtResponse = given()
+                .contentType(JSON)
+                .header("Authorization", token)
+                .and()
+                .body(Constants.UPDT_JSON)
+                .patch("/api/auth/user");
     }
 }
