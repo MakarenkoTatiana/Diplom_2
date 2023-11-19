@@ -8,9 +8,7 @@ import org.junit.Test;
 import static io.restassured.RestAssured.given;
 
 public class CreateUserTest extends TestBase{
-    String accessToken;
-    Response response;
-
+    String accessToken1;
     @Override
     public void setUp() {
         RestAssured.baseURI = Constants.baseUri;
@@ -23,7 +21,6 @@ public class CreateUserTest extends TestBase{
     public void registerUniqUser() {
         // POST запрос на регистрацию
         sendPostRequestAuthRegister(Constants.json);
-        accessToken = response.then().extract().path("accessToken");
         response.then().assertThat()
                 // статус ответа
                 .statusCode(200);
@@ -34,7 +31,7 @@ public class CreateUserTest extends TestBase{
     public void registerExistsUser() {
         // POST запрос на регистрацию
         sendPostRequestAuthRegister(Constants.json);
-        accessToken = response.then().extract().path("accessToken");
+        accessToken1 = response.then().extract().path("accessToken");
         response.then()
                 // статус ответа
                 .statusCode(200);
@@ -43,7 +40,7 @@ public class CreateUserTest extends TestBase{
         response.then().assertThat()
                 // статус ответа
                 .statusCode(403);
-        sendDeleteRequestAuthUser(accessToken);
+        sendDeleteRequestAuthUser(accessToken1);
     }
 
     @Test
@@ -53,24 +50,5 @@ public class CreateUserTest extends TestBase{
         response.then()
                 // статус ответа
                 .statusCode(403);
-    }
-
-    @Step("Send POST request to /api/auth/register")
-    public Response sendPostRequestAuthRegister(String jsonString) {
-        response = given()
-                .header("Content-type", "application/json")
-                .body(jsonString)
-                .when()
-                .post("/api/auth/register");
-        return response;
-    }
-
-    @Step("Send DELETE request to /api/auth/user")
-    public void sendDeleteRequestAuthUser(String token) {
-        given()
-                .header("Content-type", "application/json")
-                .header("Authorization", token)
-                .when()
-                .delete("/api/auth/user");
     }
 }
