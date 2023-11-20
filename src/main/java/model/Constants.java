@@ -1,3 +1,5 @@
+package model;
+
 public class Constants {
     public static final String EMAIL = "makar_test@gmail.ru";
     public static final String PASS = "MakarTest12345";

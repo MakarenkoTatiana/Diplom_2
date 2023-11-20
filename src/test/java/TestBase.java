@@ -1,6 +1,7 @@
 import io.qameta.allure.Step;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import model.Constants;
 import org.junit.After;
 import org.junit.Before;
 

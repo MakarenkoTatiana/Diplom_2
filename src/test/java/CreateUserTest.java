@@ -1,4 +1,5 @@
 import io.restassured.RestAssured;
+import model.Constants;
 import org.junit.Test;
 
 import static config.APIConfig.BASE_URI;

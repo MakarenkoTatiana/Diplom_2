@@ -1,3 +1,4 @@
+import model.Constants;
 import org.junit.Test;
 
 import static io.restassured.RestAssured.given;
