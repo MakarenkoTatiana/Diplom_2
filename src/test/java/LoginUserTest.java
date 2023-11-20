@@ -1,4 +1,3 @@
-import io.restassured.response.Response;
 import org.junit.Test;
 
 import static io.restassured.RestAssured.given;
@@ -8,7 +7,7 @@ public class LoginUserTest extends TestBase {
 
     @Test
     public void loginExistsUser() {
-        sendPostRequestAuthLogin(Constants.loginJson);
+        sendPostRequestAuthLogin(Constants.LOGIN_JSON);
         refreshToken = loginResponse.then().extract().path("refreshToken");
         loginResponse.then().statusCode(200);
         sendPostRequestAuthLogout(refreshToken);
@@ -16,7 +15,7 @@ public class LoginUserTest extends TestBase {
 
     @Test
     public void loginIncorrectUser() {
-        sendPostRequestAuthLogin(Constants.incorrectLoginJson);
+        sendPostRequestAuthLogin(Constants.INCORRECT_LOGIN_JSON);
         loginResponse.then().statusCode(401);
     }
 }

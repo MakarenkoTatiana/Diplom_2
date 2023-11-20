@@ -4,6 +4,7 @@ import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Before;
 
+import static config.APIConfig.*;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 
@@ -15,8 +16,8 @@ public class TestBase {
 
     @Before
     public void setUp() {
-        RestAssured.baseURI = Constants.baseUri;
-        sendPostRequestAuthRegister(Constants.json);
+        RestAssured.baseURI = BASE_URI;
+        sendPostRequestAuthRegister(Constants.JSON);
     }
     @After
     public void tearDown() {
@@ -26,10 +27,10 @@ public class TestBase {
     @Step("Send POST request to /api/auth/register")
     public Response sendPostRequestAuthRegister(String jsonString) {
         response = given()
-                .header("Content-type", "application/json")
+                .contentType(JSON)
                 .body(jsonString)
                 .when()
-                .post("/api/auth/register");
+                .post(USER_CREATE_API);
         accessToken = response.then().extract().path("accessToken");
         return response;
     }
@@ -37,28 +38,28 @@ public class TestBase {
     @Step("Send DELETE request to /api/auth/user")
     public void sendDeleteRequestAuthUser(String token) {
         given()
-                .header("Content-type", "application/json")
+                .contentType(JSON)
                 .header("Authorization", token)
                 .when()
-                .delete("/api/auth/user");
+                .delete(USER_MODIFIED_API);
     }
 
     @Step("Send POST request to /api/auth/logout")
     public void sendPostRequestAuthLogout(String refreshToken) {
         given()
-                .header("Content-type", "application/json")
+                .contentType(JSON)
                 .header("Authorization", refreshToken)
                 .when()
-                .delete("/api/auth/user");
+                .post(USER_LOGOUT_API);
     }
 
     @Step("Send POST request to /api/auth/login")
     public Response sendPostRequestAuthLogin(String jsonString) {
         loginResponse = given()
-                .header("Content-type", "application/json")
+                .contentType(JSON)
                 .body(jsonString)
                 .when()
-                .post("/api/auth/login");
+                .post(USER_LOGIN_API);
         return loginResponse;
     }
 
@@ -69,6 +70,6 @@ public class TestBase {
                 .header("Authorization", token)
                 .and()
                 .body(Constants.UPDT_JSON)
-                .patch("/api/auth/user");
+                .patch(USER_MODIFIED_API);
     }
 }

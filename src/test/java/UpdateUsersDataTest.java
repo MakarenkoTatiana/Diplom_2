@@ -1,8 +1,6 @@
-import io.restassured.response.Response;
 import org.junit.Test;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.http.ContentType.JSON;
 import static org.junit.Assert.*;
 
 public class UpdateUsersDataTest extends  TestBase{
@@ -11,7 +9,7 @@ public class UpdateUsersDataTest extends  TestBase{
 
     @Test
     public void updateDataWithAuthTest() {
-        sendPostRequestAuthLogin(Constants.loginJson);
+        sendPostRequestAuthLogin(Constants.LOGIN_JSON);
         refreshToken = loginResponse.then().extract().path("refreshToken");
         sendPatchRequestAuthUser(accessToken);
         String actualUserName = updtResponse
@@ -20,14 +18,14 @@ public class UpdateUsersDataTest extends  TestBase{
                 .statusCode(200)
                 .extract()
                 .path("user.name");
-        assertEquals(Constants.updtUserName, actualUserName);
+        assertEquals(Constants.UPDT_USER_NAME, actualUserName);
         String actualEmail = updtResponse
                 .then()
                 .assertThat()
                 .statusCode(200)
                 .extract()
                 .path("user.email");
-        assertEquals(Constants.updtEmail, actualEmail);
+        assertEquals(Constants.UPDT_EMAIL, actualEmail);
         sendPostRequestAuthLogout(refreshToken);
     }
 
