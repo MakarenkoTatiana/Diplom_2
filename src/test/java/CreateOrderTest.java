@@ -15,7 +15,6 @@ import static org.junit.Assert.*;
 
 public class CreateOrderTest extends TestBase{
     String accessToken;
-    Order order;
     Response orderResponse;
     @Test
     public void createOrderWithAuthTest() {
@@ -68,35 +67,5 @@ public class CreateOrderTest extends TestBase{
                 .then()
                 .assertThat()
                 .statusCode(500);
-    }
-    @Step("Get Ingredients List")
-    public Response getIngredientsList () {
-        Response ingredientsResponse = given()
-                .contentType(JSON)
-                .when()
-                .get(INGREDIENTS_GET_API);
-        return ingredientsResponse;
-    }
-    @Step("Get Ingredient By Number")
-    public String getIngredientByNum (int ingredientNum) {
-        return getIngredientsList().
-                then()
-                .assertThat()
-                .statusCode(200)
-                .extract()
-                .path(String.format("data[%s]._id", ingredientNum));
-    }
-
-    @Step("Prepare order")
-    public Order prepareOrder() {
-        List<String> ingredients = new ArrayList<>();
-        String bun = getIngredientByNum(0);
-        String stuffing = getIngredientByNum(1);
-        String sauce = getIngredientByNum(4);
-        ingredients.add(bun);
-        ingredients.add(stuffing);
-        ingredients.add(sauce);
-        order = new Order(ingredients);
-        return order;
     }
 }

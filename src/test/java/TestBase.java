@@ -7,6 +7,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.internal.requests.OrderingRequest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static config.APIConfig.*;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
@@ -17,6 +20,7 @@ public class TestBase {
     public Response loginResponse;
     public Response updtResponse;
     public Response orderResponse;
+    public Order order;
 
     @Before
     public void setUp() {
@@ -95,5 +99,34 @@ public class TestBase {
                 .body(ord)
                 .post(ORDER_CREATE_API);
         return orderResponse;
+    }
+    @Step("Get Ingredients List")
+    public Response getIngredientsList () {
+        Response ingredientsResponse = given()
+                .contentType(JSON)
+                .when()
+                .get(INGREDIENTS_GET_API);
+        return ingredientsResponse;
+    }
+    @Step("Get Ingredient By Number")
+    public String getIngredientByNum (int ingredientNum) {
+        return getIngredientsList().
+                then()
+                .assertThat()
+                .statusCode(200)
+                .extract()
+                .path(String.format("data[%s]._id", ingredientNum));
+    }
+    @Step("Prepare order")
+    public Order prepareOrder() {
+        List<String> ingredients = new ArrayList<>();
+        String bun = getIngredientByNum(0);
+        String stuffing = getIngredientByNum(1);
+        String sauce = getIngredientByNum(4);
+        ingredients.add(bun);
+        ingredients.add(stuffing);
+        ingredients.add(sauce);
+        order = new Order(ingredients);
+        return order;
     }
 }
