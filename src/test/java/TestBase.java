@@ -2,8 +2,10 @@ import io.qameta.allure.Step;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import model.Constants;
+import model.Order;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.internal.requests.OrderingRequest;
 
 import static config.APIConfig.*;
 import static io.restassured.RestAssured.given;
@@ -14,6 +16,7 @@ public class TestBase {
     public Response response;
     public Response loginResponse;
     public Response updtResponse;
+    public Response orderResponse;
 
     @Before
     public void setUp() {
@@ -72,5 +75,25 @@ public class TestBase {
                 .and()
                 .body(Constants.UPDT_JSON)
                 .patch(USER_MODIFIED_API);
+    }
+
+    @Step("Send POST request to /api/orders")
+    public Response sentPostRequestApiOrders(Order ord) {
+        orderResponse = given()
+                .contentType(JSON)
+                .header("Authorization", accessToken)
+                .and()
+                .body(ord)
+                .post(ORDER_CREATE_API);
+        return orderResponse;
+    }
+
+    @Step("Send POST request to /api/orders without auth")
+    public Response sentPostRequestApiOrdersWithoutAuth(Order ord) {
+        orderResponse = given()
+                .contentType(JSON)
+                .body(ord)
+                .post(ORDER_CREATE_API);
+        return orderResponse;
     }
 }

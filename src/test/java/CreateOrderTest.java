@@ -15,25 +15,14 @@ import static org.junit.Assert.*;
 
 public class CreateOrderTest extends TestBase{
     String accessToken;
+    Order order;
+    Response orderResponse;
     @Test
     public void createOrderWithAuthTest() {
         sendPostRequestAuthLogin(Constants.LOGIN_JSON);
         accessToken = loginResponse.then().extract().path("accessToken");
-        List<String> ingredients = new ArrayList<>();
-        String bun = getIngredientByNum(0);
-        String stuffing = getIngredientByNum(1);
-        String sauce = getIngredientByNum(4);
-        ingredients.add(bun);
-        ingredients.add(stuffing);
-        ingredients.add(sauce);
-        Order order = new Order(ingredients);
-
-        Boolean result = given()
-                .contentType(JSON)
-                .header("Authorization", accessToken)
-                .and()
-                .body(order)
-                .post(ORDER_CREATE_API)
+        prepareOrder();
+        Boolean result = sentPostRequestApiOrders(order)
                 .then()
                 .assertThat()
                 .statusCode(200)
@@ -45,19 +34,8 @@ public class CreateOrderTest extends TestBase{
     }
     @Test
     public void createOrderWithoutAuthTest() {
-        List<String> ingredients = new ArrayList<>();
-        String bun = getIngredientByNum(0);
-        String stuffing = getIngredientByNum(1);
-        String sauce = getIngredientByNum(4);
-        ingredients.add(bun);
-        ingredients.add(stuffing);
-        ingredients.add(sauce);
-        Order order = new Order(ingredients);
-
-        Boolean result = given()
-                .contentType(JSON)
-                .body(order)
-                .post(ORDER_CREATE_API)
+        prepareOrder();
+        Boolean result = sentPostRequestApiOrdersWithoutAuth(order)
                 .then()
                 .assertThat()
                 .statusCode(200)
@@ -72,10 +50,7 @@ public class CreateOrderTest extends TestBase{
         String expectedMess = "Ingredient ids must be provided";
         List<String> ingredients = new ArrayList<>();
         Order order = new Order(ingredients);
-        String actualMess = given()
-                .contentType(JSON)
-                .body(order)
-                .post(ORDER_CREATE_API)
+        String actualMess = sentPostRequestApiOrdersWithoutAuth(order)
                 .then()
                 .assertThat()
                 .statusCode(400)
@@ -89,10 +64,7 @@ public class CreateOrderTest extends TestBase{
         List<String> ingredients = new ArrayList<>();
         ingredients.add(incorrectHash);
         Order order = new Order(ingredients);
-        given()
-                .contentType(JSON)
-                .body(order)
-                .post(ORDER_CREATE_API)
+        sentPostRequestApiOrdersWithoutAuth(order)
                 .then()
                 .assertThat()
                 .statusCode(500);
@@ -113,5 +85,18 @@ public class CreateOrderTest extends TestBase{
                 .statusCode(200)
                 .extract()
                 .path(String.format("data[%s]._id", ingredientNum));
+    }
+
+    @Step("Prepare order")
+    public Order prepareOrder() {
+        List<String> ingredients = new ArrayList<>();
+        String bun = getIngredientByNum(0);
+        String stuffing = getIngredientByNum(1);
+        String sauce = getIngredientByNum(4);
+        ingredients.add(bun);
+        ingredients.add(stuffing);
+        ingredients.add(sauce);
+        order = new Order(ingredients);
+        return order;
     }
 }
