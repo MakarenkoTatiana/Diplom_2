@@ -47,6 +47,16 @@ public class TestBase {
         return response;
     }
 
+    @Step("Send POST request to /api/auth/register without accessToken")
+    public Response sendPostRequestAuthRegisterWoToken(Object object) {
+        response = given()
+                .contentType(JSON)
+                .body(object)
+                .when()
+                .post(USER_CREATE_API);
+        return response;
+    }
+
     @Step("Send DELETE request to /api/auth/user")
     public void sendDeleteRequestAuthUser(String token) {
         given()

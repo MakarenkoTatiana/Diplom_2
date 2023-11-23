@@ -1,26 +1,30 @@
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import model.Constants;
+import model.User;
 import org.junit.Test;
 
 import static config.APIConfig.BASE_URI;
 import static io.restassured.RestAssured.given;
+import static model.Constants.*;
 
 public class CreateUserTest extends TestBase{
     String correctAccessToken;
-    @Override
+    String inCorrectAccessToken;
+    /*@Override
     public void setUp() {
         RestAssured.baseURI = BASE_URI;
     }
     @Override
     public void tearDown() {
-    }
+    }*/
 
     @DisplayName("Создание уникального пользователя")
     @Test
     public void registerUniqUser() {
+        User uniqUser = new User(UPDT_EMAIL, UPDT_PASS, UPDT_USER_NAME);
         // POST запрос на регистрацию
-        sendPostRequestAuthRegister(Constants.JSON);
+        sendPostRequestAuthRegister(uniqUser);
         response.then().assertThat()
                 // статус ответа
                 .statusCode(200);
@@ -30,14 +34,15 @@ public class CreateUserTest extends TestBase{
     @DisplayName("Создание пользователя, который уже зарегистрирован")
     @Test
     public void registerExistsUser() {
+        User uniqUser = new User(UPDT_EMAIL, UPDT_PASS, UPDT_USER_NAME);
         // POST запрос на регистрацию
-        sendPostRequestAuthRegister(Constants.JSON);
+        sendPostRequestAuthRegisterWoToken(uniqUser);
         correctAccessToken = response.then().extract().path("accessToken");
         response.then()
                 // статус ответа
                 .statusCode(200);
         // POST запрос на регистрацию
-        sendPostRequestAuthRegister(Constants.JSON);
+        sendPostRequestAuthRegisterWoToken(uniqUser);
         response.then().assertThat()
                 // статус ответа
                 .statusCode(403);
@@ -47,8 +52,9 @@ public class CreateUserTest extends TestBase{
     @DisplayName("Создание пользователя без заполнения одного из обязательных полей")
     @Test
     public void registerUserWithIncorrectData() {
+        User incorrectUser = new User(EMAIL, PASS);
         // POST запрос на регистрацию
-        sendPostRequestAuthRegister(Constants.INCORRECT_JSON);
+        sendPostRequestAuthRegisterWoToken(incorrectUser);
         response.then()
                 // статус ответа
                 .statusCode(403);
