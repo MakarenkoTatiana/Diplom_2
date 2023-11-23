@@ -2,6 +2,7 @@ import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import model.Constants;
 import model.Order;
+import model.User;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -10,6 +11,8 @@ import java.util.List;
 import static config.APIConfig.*;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
+import static model.Constants.EMAIL;
+import static model.Constants.PASS;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.*;
 
@@ -18,7 +21,8 @@ public class CreateOrderTest extends TestBase{
     Response orderResponse;
     @Test
     public void createOrderWithAuthTest() {
-        sendPostRequestAuthLogin(Constants.LOGIN_JSON);
+        User userLogin = new User(EMAIL, PASS);
+        sendPostRequestAuthLogin(userLogin);
         accessToken = loginResponse.then().extract().path("accessToken");
         prepareOrder();
         Boolean result = sentPostRequestApiOrders(order)

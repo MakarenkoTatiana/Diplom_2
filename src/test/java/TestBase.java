@@ -3,6 +3,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import model.Constants;
 import model.Order;
+import model.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.internal.requests.OrderingRequest;
@@ -13,6 +14,7 @@ import java.util.List;
 import static config.APIConfig.*;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
+import static model.Constants.*;
 
 public class TestBase {
     public String accessToken;
@@ -21,11 +23,13 @@ public class TestBase {
     public Response updtResponse;
     public Response orderResponse;
     public Order order;
+    User user;
 
     @Before
     public void setUp() {
+        user = new User(EMAIL, PASS, USER_NAME);
         RestAssured.baseURI = BASE_URI;
-        sendPostRequestAuthRegister(Constants.JSON);
+        sendPostRequestAuthRegister(user);
     }
     @After
     public void tearDown() {
@@ -33,10 +37,10 @@ public class TestBase {
     }
 
     @Step("Send POST request to /api/auth/register")
-    public Response sendPostRequestAuthRegister(String jsonString) {
+    public Response sendPostRequestAuthRegister(Object object) {
         response = given()
                 .contentType(JSON)
-                .body(jsonString)
+                .body(object)
                 .when()
                 .post(USER_CREATE_API);
         accessToken = response.then().extract().path("accessToken");
@@ -62,10 +66,10 @@ public class TestBase {
     }
 
     @Step("Send POST request to /api/auth/login")
-    public Response sendPostRequestAuthLogin(String jsonString) {
+    public Response sendPostRequestAuthLogin(Object object) {
         loginResponse = given()
                 .contentType(JSON)
-                .body(jsonString)
+                .body(object)
                 .when()
                 .post(USER_LOGIN_API);
         return loginResponse;
