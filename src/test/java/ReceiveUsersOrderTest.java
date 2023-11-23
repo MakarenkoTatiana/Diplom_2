@@ -1,4 +1,5 @@
 import model.Constants;
+import model.User;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -7,6 +8,8 @@ import java.util.List;
 import static config.APIConfig.ORDER_GET_API;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
+import static model.Constants.EMAIL;
+import static model.Constants.PASS;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 
@@ -14,7 +17,8 @@ public class ReceiveUsersOrderTest extends TestBase{
     int expectedOrders = 2;
     @Test
     public void receiveAuthUsersOrder() {
-        sendPostRequestAuthLogin(Constants.LOGIN_JSON);
+        User userLogin = new User(EMAIL, PASS);
+        sendPostRequestAuthLogin(userLogin);
         accessToken = loginResponse.then().extract().path("accessToken");
         prepareOrder();
         //Создаем несколько заказов
