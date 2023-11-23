@@ -1,3 +1,4 @@
+import io.qameta.allure.junit4.DisplayName;
 import model.Constants;
 import model.User;
 import org.junit.Before;
@@ -15,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 
 public class ReceiveUsersOrderTest extends TestBase{
     int expectedOrders = 2;
+    @DisplayName("Получение заказов авторизованного пользователя")
     @Test
     public void receiveAuthUsersOrder() {
         User userLogin = new User(EMAIL, PASS);
@@ -37,6 +39,7 @@ public class ReceiveUsersOrderTest extends TestBase{
         assertEquals(expectedOrders, AuthUsersOrders.size());
     }
 
+    @DisplayName("Получение заказов неавторизованного пользователя")
     @Test
     public void receiveWithoutAuthUsersOrder() {
         String expectedMess = "You should be authorised";

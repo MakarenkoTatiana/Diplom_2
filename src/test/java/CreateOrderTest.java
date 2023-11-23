@@ -1,4 +1,5 @@
 import io.qameta.allure.Step;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import model.Constants;
 import model.Order;
@@ -19,6 +20,7 @@ import static org.junit.Assert.*;
 public class CreateOrderTest extends TestBase{
     String accessToken;
     Response orderResponse;
+    @DisplayName("Создание заказа с авторизацией")
     @Test
     public void createOrderWithAuthTest() {
         User userLogin = new User(EMAIL, PASS);
@@ -35,6 +37,7 @@ public class CreateOrderTest extends TestBase{
                 .path("success");
         assertTrue(result);
     }
+    @DisplayName("Создание заказа без авторизации")
     @Test
     public void createOrderWithoutAuthTest() {
         prepareOrder();
@@ -48,6 +51,7 @@ public class CreateOrderTest extends TestBase{
                 .path("success");
         assertTrue(result);
     }
+    @DisplayName("Создание заказа без ингредиентов")
     @Test
     public void createOrderWithoutIngredientsTest() {
         String expectedMess = "Ingredient ids must be provided";
@@ -61,6 +65,7 @@ public class CreateOrderTest extends TestBase{
                 .path("message");
         assertEquals(expectedMess, actualMess);
     }
+    @DisplayName("Создание заказа с неверным хешем ингредиентов")
     @Test
     public void createOrderWithIncorrectHashTest() {
         String incorrectHash = "incorrectHash";

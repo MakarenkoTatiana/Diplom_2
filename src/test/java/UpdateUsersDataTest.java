@@ -1,3 +1,4 @@
+import io.qameta.allure.junit4.DisplayName;
 import model.Constants;
 import org.junit.Test;
 
@@ -8,6 +9,7 @@ public class UpdateUsersDataTest extends  TestBase{
     String refreshToken;
     String responseMessage;
 
+    @DisplayName("Изменение данных пользователя с авторизацией")
     @Test
     public void updateDataWithAuthTest() {
         sendPostRequestAuthLogin(Constants.LOGIN_JSON);
@@ -30,6 +32,7 @@ public class UpdateUsersDataTest extends  TestBase{
         sendPostRequestAuthLogout(refreshToken);
     }
 
+    @DisplayName("Изменение данных пользователя без авторизации")
     @Test
     public void updateDataWithoutAuthTest() {
         String emptyAccessToken = "";

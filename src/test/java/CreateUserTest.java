@@ -1,3 +1,4 @@
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import model.Constants;
 import org.junit.Test;
@@ -6,7 +7,7 @@ import static config.APIConfig.BASE_URI;
 import static io.restassured.RestAssured.given;
 
 public class CreateUserTest extends TestBase{
-    String accessToken1;
+    String correctAccessToken;
     @Override
     public void setUp() {
         RestAssured.baseURI = BASE_URI;
@@ -15,6 +16,7 @@ public class CreateUserTest extends TestBase{
     public void tearDown() {
     }
 
+    @DisplayName("Создание уникального пользователя")
     @Test
     public void registerUniqUser() {
         // POST запрос на регистрацию
@@ -25,11 +27,12 @@ public class CreateUserTest extends TestBase{
         sendDeleteRequestAuthUser(accessToken);
     }
 
+    @DisplayName("Создание пользователя, который уже зарегистрирован")
     @Test
     public void registerExistsUser() {
         // POST запрос на регистрацию
         sendPostRequestAuthRegister(Constants.JSON);
-        accessToken1 = response.then().extract().path("accessToken");
+        correctAccessToken = response.then().extract().path("accessToken");
         response.then()
                 // статус ответа
                 .statusCode(200);
@@ -38,9 +41,10 @@ public class CreateUserTest extends TestBase{
         response.then().assertThat()
                 // статус ответа
                 .statusCode(403);
-        sendDeleteRequestAuthUser(accessToken1);
+        sendDeleteRequestAuthUser(correctAccessToken);
     }
 
+    @DisplayName("Создание пользователя без заполнения одного из обязательных полей")
     @Test
     public void registerUserWithIncorrectData() {
         // POST запрос на регистрацию
