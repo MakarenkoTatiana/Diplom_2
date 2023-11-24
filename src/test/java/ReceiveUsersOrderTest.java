@@ -13,9 +13,14 @@ import static model.Constants.EMAIL;
 import static model.Constants.PASS;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
+import static utils.AuthRequest.loginResponse;
+import static utils.AuthRequest.sendPostRequestAuthLogin;
+import static utils.OrderRequest.*;
 
 public class ReceiveUsersOrderTest extends TestBase{
-    int expectedOrders = 2;
+    private String accessToken;
+    private String emptyAccessToken;
+    private int expectedOrders = 2;
     @DisplayName("Получение заказов авторизованного пользователя")
     @Test
     public void receiveAuthUsersOrder() {
@@ -24,8 +29,8 @@ public class ReceiveUsersOrderTest extends TestBase{
         accessToken = loginResponse.then().extract().path("accessToken");
         prepareOrder();
         //Создаем несколько заказов
-        sentPostRequestApiOrders(order);
-        sentPostRequestApiOrders(order);
+        sentPostRequestApiOrders(prepareOrder(),accessToken);
+        sentPostRequestApiOrders(prepareOrder(), accessToken);
         List<String> AuthUsersOrders = given()
                 .header("Authorization", accessToken)
                 .get(ORDER_GET_API)
@@ -44,9 +49,7 @@ public class ReceiveUsersOrderTest extends TestBase{
     public void receiveWithoutAuthUsersOrder() {
         String expectedMess = "You should be authorised";
         prepareOrder();
-        //Создаем несколько заказов
-        sentPostRequestApiOrders(order);
-        sentPostRequestApiOrders(order);
+        sentPostRequestApiOrdersWithoutAuth(prepareOrder());
         given()
                 .contentType(JSON)
                 .get(ORDER_GET_API)

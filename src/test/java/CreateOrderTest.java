@@ -16,6 +16,9 @@ import static model.Constants.EMAIL;
 import static model.Constants.PASS;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.*;
+import static utils.AuthRequest.loginResponse;
+import static utils.AuthRequest.sendPostRequestAuthLogin;
+import static utils.OrderRequest.*;
 
 public class CreateOrderTest extends TestBase{
     String accessToken;
@@ -27,7 +30,7 @@ public class CreateOrderTest extends TestBase{
         sendPostRequestAuthLogin(userLogin);
         accessToken = loginResponse.then().extract().path("accessToken");
         prepareOrder();
-        Boolean result = sentPostRequestApiOrders(order)
+        Boolean result = sentPostRequestApiOrders(order, accessToken)
                 .then()
                 .assertThat()
                 .statusCode(200)

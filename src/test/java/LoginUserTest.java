@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import static io.restassured.RestAssured.given;
 import static model.Constants.*;
+import static utils.AuthRequest.*;
 
 public class LoginUserTest extends TestBase {
     String refreshToken;

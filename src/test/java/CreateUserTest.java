@@ -7,6 +7,7 @@ import org.junit.Test;
 import static config.APIConfig.BASE_URI;
 import static io.restassured.RestAssured.given;
 import static model.Constants.*;
+import static utils.UserRequest.*;
 
 public class CreateUserTest extends TestBase{
     String correctAccessToken;

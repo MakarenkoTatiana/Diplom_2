@@ -7,6 +7,8 @@ import static io.restassured.RestAssured.given;
 import static model.Constants.EMAIL;
 import static model.Constants.PASS;
 import static org.junit.Assert.*;
+import static utils.AuthRequest.*;
+import static utils.UserRequest.*;
 
 public class UpdateUsersDataTest extends  TestBase{
     String refreshToken;
