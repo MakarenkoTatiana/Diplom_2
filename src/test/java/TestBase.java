@@ -23,7 +23,8 @@ public class TestBase {
     public Response updtResponse;
     public Response orderResponse;
     public Order order;
-    User user;
+    private User user;
+    private User updtUser;
 
     @Before
     public void setUp() {
@@ -87,11 +88,12 @@ public class TestBase {
 
     @Step("Send PATCH request to /api/auth/user")
     public void sendPatchRequestAuthUser(String token) {
+        updtUser = new User(UPDT_EMAIL, UPDT_PASS, USER_NAME);
         updtResponse = given()
                 .contentType(JSON)
                 .header("Authorization", token)
                 .and()
-                .body(Constants.UPDT_JSON)
+                .body(updtUser)
                 .patch(USER_MODIFIED_API);
     }
 

@@ -1,8 +1,11 @@
 import io.qameta.allure.junit4.DisplayName;
 import model.Constants;
+import model.User;
 import org.junit.Test;
 
 import static io.restassured.RestAssured.given;
+import static model.Constants.EMAIL;
+import static model.Constants.PASS;
 import static org.junit.Assert.*;
 
 public class UpdateUsersDataTest extends  TestBase{
@@ -12,7 +15,8 @@ public class UpdateUsersDataTest extends  TestBase{
     @DisplayName("Изменение данных пользователя с авторизацией")
     @Test
     public void updateDataWithAuthTest() {
-        sendPostRequestAuthLogin(Constants.LOGIN_JSON);
+        User userLogin = new User(EMAIL, PASS);
+        sendPostRequestAuthLogin(userLogin);
         refreshToken = loginResponse.then().extract().path("refreshToken");
         sendPatchRequestAuthUser(accessToken);
         String actualUserName = updtResponse
