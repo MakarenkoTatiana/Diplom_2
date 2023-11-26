@@ -17,21 +17,21 @@ public class OrderRequest {
     public static Order order;
 
     @Step("Send POST request to /api/orders")
-    public static Response sentPostRequestApiOrders(Order ord, String token) {
+    public static Response sentPostRequestApiOrders(Order testOrder, String token) {
         orderResponse = given()
                 .contentType(JSON)
                 .header("Authorization", token)
                 .and()
-                .body(ord)
+                .body(testOrder)
                 .post(ORDER_CREATE_API);
         return orderResponse;
     }
 
     @Step("Send POST request to /api/orders without auth")
-    public static Response sentPostRequestApiOrdersWithoutAuth(Order ord) {
+    public static Response sentPostRequestApiOrdersWithoutAuth(Order testOrder) {
         orderResponse = given()
                 .contentType(JSON)
-                .body(ord)
+                .body(testOrder)
                 .post(ORDER_CREATE_API);
         return orderResponse;
     }

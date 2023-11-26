@@ -2,6 +2,7 @@ package utils;
 
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
+import model.User;
 
 import static config.APIConfig.USER_LOGIN_API;
 import static config.APIConfig.USER_LOGOUT_API;
@@ -20,10 +21,11 @@ public class AuthRequest {
     }
 
     @Step("Send POST request to /api/auth/login")
-    public static Response sendPostRequestAuthLogin(Object object) {
+    public static Response sendPostRequestAuthLogin(User user
+    ) {
         loginResponse = given()
                 .contentType(JSON)
-                .body(object)
+                .body(user)
                 .when()
                 .post(USER_LOGIN_API);
         return loginResponse;

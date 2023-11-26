@@ -1,9 +1,7 @@
 import io.qameta.allure.junit4.DisplayName;
-import model.Constants;
 import model.User;
 import org.junit.Test;
 
-import static io.restassured.RestAssured.given;
 import static model.Constants.*;
 import static utils.AuthRequest.*;
 

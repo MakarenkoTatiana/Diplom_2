@@ -1,7 +1,5 @@
-import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
-import model.Constants;
 import model.Order;
 import model.User;
 import org.junit.Test;
@@ -9,20 +7,19 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static config.APIConfig.*;
-import static io.restassured.RestAssured.given;
-import static io.restassured.http.ContentType.JSON;
 import static model.Constants.EMAIL;
 import static model.Constants.PASS;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static utils.AuthRequest.loginResponse;
 import static utils.AuthRequest.sendPostRequestAuthLogin;
 import static utils.OrderRequest.*;
 
-public class CreateOrderTest extends TestBase{
+public class CreateOrderTest extends TestBase {
     String accessToken;
     Response orderResponse;
+
     @DisplayName("Создание заказа с авторизацией")
     @Test
     public void createOrderWithAuthTest() {
@@ -40,6 +37,7 @@ public class CreateOrderTest extends TestBase{
                 .path("success");
         assertTrue(result);
     }
+
     @DisplayName("Создание заказа без авторизации")
     @Test
     public void createOrderWithoutAuthTest() {
@@ -54,6 +52,7 @@ public class CreateOrderTest extends TestBase{
                 .path("success");
         assertTrue(result);
     }
+
     @DisplayName("Создание заказа без ингредиентов")
     @Test
     public void createOrderWithoutIngredientsTest() {
@@ -68,6 +67,7 @@ public class CreateOrderTest extends TestBase{
                 .path("message");
         assertEquals(expectedMess, actualMess);
     }
+
     @DisplayName("Создание заказа с неверным хешем ингредиентов")
     @Test
     public void createOrderWithIncorrectHashTest() {

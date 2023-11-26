@@ -16,10 +16,10 @@ public class UserRequest {
     public static Response updtResponse;
     private static User updtUser;
     @Step("Send POST request to /api/auth/register")
-    public static Response sendPostRequestAuthRegister(Object object) {
+    public static Response sendPostRequestAuthRegister(User user) {
         response = given()
                 .contentType(JSON)
-                .body(object)
+                .body(user)
                 .when()
                 .post(USER_CREATE_API);
         accessToken = response.then().extract().path("accessToken");
@@ -27,10 +27,10 @@ public class UserRequest {
     }
 
     @Step("Send POST request to /api/auth/register without accessToken")
-    public static Response sendPostRequestAuthRegisterWoToken(Object object) {
+    public static Response sendPostRequestAuthRegisterWoToken(User user) {
         response = given()
                 .contentType(JSON)
-                .body(object)
+                .body(user)
                 .when()
                 .post(USER_CREATE_API);
         return response;
@@ -46,8 +46,8 @@ public class UserRequest {
     }
 
     @Step("Send PATCH request to /api/auth/user")
-    public static void sendPatchRequestAuthUser(String token) {
-        updtUser = new User(UPDT_EMAIL, UPDT_PASS, USER_NAME);
+    public static void sendPatchRequestAuthUser(String email, String password, String userName, String token) {
+        updtUser = new User(email, password, userName);
         updtResponse = given()
                 .contentType(JSON)
                 .header("Authorization", token)

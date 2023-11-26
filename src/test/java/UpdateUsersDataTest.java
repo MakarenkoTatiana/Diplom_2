@@ -3,14 +3,12 @@ import model.Constants;
 import model.User;
 import org.junit.Test;
 
-import static io.restassured.RestAssured.given;
-import static model.Constants.EMAIL;
-import static model.Constants.PASS;
-import static org.junit.Assert.*;
+import static model.Constants.*;
+import static org.junit.Assert.assertEquals;
 import static utils.AuthRequest.*;
 import static utils.UserRequest.*;
 
-public class UpdateUsersDataTest extends  TestBase{
+public class UpdateUsersDataTest extends TestBase {
     String refreshToken;
     String responseMessage;
 
@@ -20,7 +18,7 @@ public class UpdateUsersDataTest extends  TestBase{
         User userLogin = new User(EMAIL, PASS);
         sendPostRequestAuthLogin(userLogin);
         refreshToken = loginResponse.then().extract().path("refreshToken");
-        sendPatchRequestAuthUser(accessToken);
+        sendPatchRequestAuthUser(UPDT_EMAIL, UPDT_PASS, USER_NAME, accessToken);
         String actualUserName = updtResponse
                 .then()
                 .assertThat()
@@ -34,7 +32,7 @@ public class UpdateUsersDataTest extends  TestBase{
                 .statusCode(200)
                 .extract()
                 .path("user.email");
-        assertEquals(Constants.UPDT_EMAIL, actualEmail);
+        assertEquals(UPDT_EMAIL, actualEmail);
         sendPostRequestAuthLogout(refreshToken);
     }
 
@@ -43,7 +41,7 @@ public class UpdateUsersDataTest extends  TestBase{
     public void updateDataWithoutAuthTest() {
         String emptyAccessToken = "";
         String expectedMessage = "You should be authorised";
-        sendPatchRequestAuthUser(emptyAccessToken);
+        sendPatchRequestAuthUser(UPDT_EMAIL, UPDT_PASS, USER_NAME, emptyAccessToken);
         responseMessage = updtResponse
                 .then()
                 .assertThat()

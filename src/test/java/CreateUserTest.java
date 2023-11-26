@@ -1,24 +1,13 @@
 import io.qameta.allure.junit4.DisplayName;
-import io.restassured.RestAssured;
-import model.Constants;
 import model.User;
 import org.junit.Test;
 
-import static config.APIConfig.BASE_URI;
-import static io.restassured.RestAssured.given;
 import static model.Constants.*;
 import static utils.UserRequest.*;
 
-public class CreateUserTest extends TestBase{
+public class CreateUserTest extends TestBase {
     String correctAccessToken;
     String inCorrectAccessToken;
-    /*@Override
-    public void setUp() {
-        RestAssured.baseURI = BASE_URI;
-    }
-    @Override
-    public void tearDown() {
-    }*/
 
     @DisplayName("Создание уникального пользователя")
     @Test
